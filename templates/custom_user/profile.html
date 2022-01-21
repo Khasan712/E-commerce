@@ -1,0 +1,468 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load hitcount_tags %}
+{% load social_share %}
+{% block content %}
+
+        <main class="main">
+        	<div class="page-header text-center" style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}')">
+        		<div class="container">
+
+					{% if user.id == userProfile.id %}
+        				<h1 class="page-title">Hello!!! {{ userProfile.username }}<span>Welcome</span></h1>
+					{% else %}
+        				<h1 class="page-title">Profile {{ userProfile.username }}<span>Welcome</span></h1>
+					{% endif %}
+
+        				<h1 class="page-title"><span>{{geo_data}}</span></h1>
+					</div><!-- End .container -->
+        	</div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+
+						{% if user.id == userProfile.id %}
+                        	<li class="breadcrumb-item active" aria-current="page">My Account</li>
+						{% else %}
+							<li class="breadcrumb-item active" aria-current="page">{{userProfile.username}}'s Account</li>
+						{% endif %}
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+			
+			<div class="page-content">
+
+				{% if user.id == userProfile.id %}
+					<div class="dashboard">
+						<div class="container">
+							<div class="row">
+								<aside class="col-md-4 col-lg-3">
+									<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+
+										
+										<li class="nav-item">
+											<a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+										</li>
+										
+										<li class="nav-item">
+											<a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="{% url 'user_logout' %}">Sign Out</a>
+										</li>
+									</ul>
+								</aside><!-- End .col-lg-3 -->
+
+								
+								<div class="col-md-8 col-lg-9">
+									<div class="tab-content">
+										<div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+										
+											{% if user.id == userProfile.id %}
+												<form method="POST" action="{% url 'user_profile' user.username %}" enctype="multipart/form-data">{% csrf_token %}
+													{% comment %} {{form.as_p}} {% endcomment %}
+													{{form.title.label}}
+													{{form.title}}
+
+													<br>
+													<br>
+													{{form.main_category.label}}
+													<br>
+													<select class="form-select" id="inputGroupSelect01">
+														<option selected>Choose...</option>
+														{% for f in form.main_category %}
+															<option value="{{f}}">}</option>
+														{% endfor %}
+													</select>
+													
+													<br>
+													<br>
+													{{form.product_category.label}}
+													<br>
+													<select class="form-select" id="inputGroupSelect01">
+														<option selected>Choose...</option>
+														{% for f in form.product_category %}
+															<option value="{{f}}">}</option>
+														{% endfor %}
+													</select>
+													
+													<br>
+													<br>
+													{{form.image}}
+
+													<br>
+													<br>
+													{{form.description.label}}
+													<br>
+													{{form.description}}
+
+													<br>
+													<br>
+													{{form.price.label}}
+													<br>
+													{{form.price}}
+
+													<br>
+													<br>
+													{{form.discount.label}}
+													<br>
+													{{form.discount}}
+
+													<br>
+													<br>
+													{{form.color.label}}
+													<br>
+													<select class="form-select" id="inputGroupSelect01">
+														<option selected>Choose...</option>
+														{% for f in form.color %}
+															<option value="{{f}}">}</option>
+														{% endfor %}
+													</select>
+
+													<br>
+													<br>
+													{{form.size.label}}
+													<br>
+													<select class="form-select" id="inputGroupSelect01">
+														<option selected>Choose...</option>
+														{% for f in form.size %}
+															<option value="{{f}}">}</option>
+														{% endfor %}
+													</select>
+
+													<br>
+													<br>
+													{{form.tag.label}}
+													<br>
+													{{form.tag}}
+
+													<input value='Create' type="submit"/>
+												</form>
+											{% endif %}
+
+										</div><!-- .End .tab-pane -->
+
+										<div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+											
+										</div><!-- .End .tab-pane -->
+
+										<div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
+											<p>No downloads available yet.</p>
+											<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+										</div><!-- .End .tab-pane -->
+
+										<div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+											<p>The following addresses will be used on the checkout page by default.</p>
+
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="card card-dashboard">
+														<div class="card-body">
+															<h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+
+															<p>User Name<br>
+															User Company<br>
+															John str<br>
+															New York, NY 10001<br>
+															1-234-987-6543<br>
+															yourmail@mail.com<br>
+															<a href="#">Edit <i class="icon-edit"></i></a></p>
+														</div><!-- End .card-body -->
+													</div><!-- End .card-dashboard -->
+												</div><!-- End .col-lg-6 -->
+
+												<div class="col-lg-6">
+													<div class="card card-dashboard">
+														<div class="card-body">
+															<h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
+
+															<p>You have not set up this type of address yet.<br>
+															<a href="#">Edit <i class="icon-edit"></i></a></p>
+														</div><!-- End .card-body -->
+													</div><!-- End .card-dashboard -->
+												</div><!-- End .col-lg-6 -->
+											</div><!-- End .row -->
+										</div><!-- .End .tab-pane -->
+
+										<div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+
+											
+											<form action="#" method="POST">{% csrf_token %}
+												<div class="row">
+
+
+													{% if userProfile.first_name == None %}
+														<div class="col-sm-6">
+															<h5>Name: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Name: <span style="color: #969696; font-size: 1vw;">{{userProfile.first_name}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if userProfile.last_name == None %}
+														<div class="col-sm-6">
+															<h5>Last Name: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Last Name: <span style="color: #969696; font-size: 1vw;">{{userProfile.last_name}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if userProfile.username == None %}
+														<div class="col-sm-6">
+															<h5>Username: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Username: <span style="color: #969696; font-size: 1vw;">{{userProfile.username}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if userProfile.email == None %}
+														<div class="col-sm-6">
+															<h5>Email: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Email: <span style="color: #969696; font-size: 1vw;">{{userProfile.email}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if userProfile.tel == None %}
+														<div class="col-sm-6">
+															<h5>Telephone: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Telephone: <span style="color: #969696; font-size: 1vw;">{{userProfile.tel}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+													{% comment %} <p>{{res.country}}</p> {% endcomment %}
+													{% if userProfile.address == None %}
+														<div class="col-sm-6">
+															<h5>Address: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															{% comment %} <h5>Address: <span style="color: #969696; font-size: 1vw;">{{userProfile.address}}</span></h5> {% endcomment %}
+															<h5>Address: <span style="color: #969696; font-size: 1vw;">{{geo_data.country}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+													{% if userProfile.address == None %}
+														<div class="col-sm-6">
+															<h5>Region: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															{% comment %} <h5>Address: <span style="color: #969696; font-size: 1vw;">{{userProfile.address}}</span></h5> {% endcomment %}
+															<h5>Address: <span style="color: #969696; font-size: 1vw;">{{geo_data.regionName}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if userProfile.website == None %}
+														<div class="col-sm-6">
+															<h5>Website: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Website: <span style="color: #969696; font-size: 1vw;">{{userProfile.website}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if userProfile.bio == None %}
+														<div class="col-sm-6">
+															<h5>Bio: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Bio: <span style="color: #969696; font-size: 1vw;">{{userProfile.bio}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if userProfile.date_published == None %}
+														<div class="col-sm-6">
+															<h5>Date joined: <span style="color: #969696; font-size: 1vw;"></span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% else %}
+														<div class="col-sm-6">
+															<h5>Date joined: <span style="color: #969696; font-size: 1vw;">{{userProfile.date_published}}</span></h5>
+														</div><!-- End .col-sm-6 -->
+													{% endif %}
+
+
+													{% if request.user.id == userProfile.id %}
+													<div class="col-sm-6">
+														<a href="{% url 'edit_profile' user.username %}" type="submit" class="btn btn-outline-primary-2">
+															<span>Edit</span>
+															<i class="icon-long-arrow-right"></i>
+														</a>
+													</div><!-- End .col-sm-6 -->
+													{% endif %}
+												</div><!-- End .row -->
+
+												
+											</form>
+											
+
+
+
+										</div><!-- .End .tab-pane -->
+									</div>
+								</div><!-- End .col-lg-9 -->
+							</div><!-- End .row -->
+
+
+
+							<div class="container">
+								<div class="products mb-3">
+									<div class="row justify-content-center">
+										{% for pro in post_products %}
+											<div class="col-6 col-md-4 col-lg-4 col-xl-3">
+												<div class="product product-7 text-center">
+													<figure class="product-media">
+														<a href="{% url 'product_view' pro.id %}">
+															<img src="{{pro.image.all.first.image.url}}" alt="Product image" class="product-image">
+														</a>
+														{% comment %} 
+														<div class="product-action-vertical">
+															<a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+															<a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+															<a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+														</div><!-- End .product-action-vertical --> {% endcomment %}
+			
+														<div class="product-action">
+															{% comment %} <a href="{% url 'cart_add' pro.id %}" class="btn-product btn-cart"><span>add to cart</span></a> {% endcomment %}
+															<a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+														</div><!-- End .product-action -->
+													</figure><!-- End .product-media -->
+			
+													<div class="product-body">
+														<div class="product-cat">
+															<a href="#">{{pro.title}}</a>
+														</div><!-- End .product-cat -->
+			
+															{% if pro.description %}
+																<h3 class="product-title"><a href="product.html">{{pro.description|slice:"20"}} ...</a></h3><!-- End .product-title -->
+															{% else %}
+															{% endif %}
+														
+														<div class="product-price">
+															{% if pro.price %}
+																{{pro.price}} | {% get_hit_count for pro %} Viewed
+															{% else %}
+															{% endif %}
+														</div><!-- End .product-price -->
+			
+														<div class="product-nav product-nav-thumbs">
+			
+															{% if pro.image %}
+																{% for images in pro.image.all %}
+																<a href="#">
+																	<img src="{{images.image.url}}" alt="product desc">
+																</a>
+																{% endfor %}
+															{% else %}
+															{% endif %}
+														</div><!-- End .product-nav -->
+													</div><!-- End .product-body -->
+												</div><!-- End .product -->
+											</div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+										{% endfor %}
+									</div>	
+								</div>
+							</div>
+
+							
+						</div><!-- End .container -->
+					</div><!-- End .dashboard -->
+				{% else %}
+
+				<div class="container">
+					<div class="products mb-3">
+						<div class="row justify-content-center">
+							{% for pro in post_products %}
+								<div class="col-6 col-md-4 col-lg-4 col-xl-3">
+									<div class="product product-7 text-center">
+										<figure class="product-media">
+											<a href="{% url 'product_view' pro.id %}">
+												<img src="{{pro.image.all.first.image.url}}" alt="Product image" class="product-image">
+											</a>
+											{% comment %} 
+											<div class="product-action-vertical">
+												<a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+												<a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+												<a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+											</div><!-- End .product-action-vertical --> {% endcomment %}
+
+											<div class="product-action">
+												{% comment %} <a href="{% url 'cart_add' pro.id %}" class="btn-product btn-cart"><span>add to cart</span></a> {% endcomment %}
+												<a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+											</div><!-- End .product-action -->
+										</figure><!-- End .product-media -->
+
+										<div class="product-body">
+											<div class="product-cat">
+												<a href="#">{{pro.title}}</a>
+											</div><!-- End .product-cat -->
+
+												{% if pro.description %}
+													<h3 class="product-title"><a href="product.html">{{pro.description|slice:"20"}} ...</a></h3><!-- End .product-title -->
+												{% else %}
+												{% endif %}
+											
+											<div class="product-price">
+												{% if pro.price %}
+													{{pro.price}} | {% get_hit_count for pro %} Viewed
+												{% else %}
+												{% endif %}
+											</div><!-- End .product-price -->
+
+											<div class="product-nav product-nav-thumbs">
+
+												{% if pro.image %}
+													{% for images in pro.image.all %}
+													<a href="#">
+														<img src="{{images.image.url}}" alt="product desc">
+													</a>
+													{% endfor %}
+												{% else %}
+												{% endif %}
+											</div><!-- End .product-nav -->
+										</div><!-- End .product-body -->
+									</div><!-- End .product -->
+								</div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+							{% endfor %}
+						</div>	
+					</div>
+				</div>
+				{% endif %}
+			</div><!-- End .page-content -->
+			
+			
+        </main><!-- End .main -->
+{% endblock content %}
