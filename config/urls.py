@@ -31,4 +31,8 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     # path('cart/', include(('project_cart.urls','cart') ,namespace='cart')),
     # path('comments/', include('comments_user.urls')),
+
+    # Rest Api
+    path('api/product/', include('mainapp.product_api.urls', 'product_api')),
+    path('api/register/user/', include('custom_user.api_custom.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
