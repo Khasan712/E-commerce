@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 from hitcount.models import HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 from config import settings
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -15,7 +16,7 @@ class MainCategory(models.Model):
     main_slug = models.SlugField(max_length=200, unique=True)
 
     def __str__(self):
-        return self.category
+        return self.main_slug
     
     def get_main_category_products_count(self):
         return self.main_category.count()
@@ -24,6 +25,7 @@ class MainCategory(models.Model):
 
 class ProductCategories(models.Model):
     title = models.CharField(max_length=250, blank=True)
+    
 
     def __str__(self):
         return self.title
@@ -56,11 +58,13 @@ class SizesProducts(models.Model):
 class ColorsProducts(models.Model):
     colors =models.CharField(max_length=220, blank=True)
 
+    def __str__(self):
+        return self.colors
+
     def get_colors_products_count(self):
         return self.color.count()
 
-    def __str__(self):
-        return self.colors
+    
 
 
 class ImageProduct(models.Model):
@@ -93,10 +97,15 @@ class Product(models.Model):
     )
     image = models.ManyToManyField(ImageProduct, blank=True)
     title = models.CharField(max_length=250, blank=True)
-    description = models.TextField(blank=True)
-    main_category = models.ManyToManyField(MainCategory, blank=True, related_name='main_category')
+    description = RichTextField(blank=True)
+    main_category = models.ManyToManyField(
+        MainCategory,
+        blank=True,
+        related_name='main_category',
+        db_column='MainCategory_category'
+    )
     product_category = models.ManyToManyField(ProductCategories, blank=True, related_name='product_category')
-    price = models.FloatField(blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True)
     # print(type(price))
     color = models.ManyToManyField(ColorsProducts, blank=True, related_name='color')
     size = models.ManyToManyField(SizesProducts, blank=True, related_name='size')
@@ -107,7 +116,7 @@ class Product(models.Model):
     hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation', blank=True)
     top_or_new = models.CharField(max_length=3, choices=TOP_NEW_CHOICES, default='', blank=True)
 
-    qty_product = models.PositiveIntegerField(default='1', blank=True, null=True)
+    # qty_product = models.PositiveIntegerField(default='1', blank=True, null=True)
 
     product_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -118,6 +127,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_main_category(self):
+        return self.main_category.main_slug
+
+    def get_color_count(self):
+        return self.colors.count()
 
 
 

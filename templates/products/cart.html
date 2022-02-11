@@ -54,7 +54,11 @@
 												<td class="price-col">${{cart_item.product.price}}</td>
 												<td class="quantity-col">
 													<div class="cart-product-quantity">
-														<input type="number" class="form-control" value="{{cart_item.product.qty_product}}" min="1" max="10" step="1" data-decimals="0" required>
+														<div class="justify-content-md-center">
+															<a class="rol border border-warning" href="{% url 'remove_cart_item' cart_item.product_id %}">-</a>
+															<a class="rol border border-warning" href="">{{cart_item.quantity}}</a>
+															<a class="rol border border-warning" href="{% url 'cart_add' cart_item.product_id %}">+</a>
+														</div>
 													</div><!-- End .cart-product-quantity -->
 												</td>
 												<td class="total-col">${{cart_item.get_total_cart_item_price}}</td>
