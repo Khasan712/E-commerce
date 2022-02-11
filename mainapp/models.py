@@ -1,7 +1,5 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-# from djmoney.models.fields import MoneyField
-from colorfield.fields import ColorField
 from taggit.managers import TaggableManager
 from hitcount.models import HitCount
 from django.contrib.contenttypes.fields import GenericRelation

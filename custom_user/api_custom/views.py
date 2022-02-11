@@ -13,7 +13,7 @@ def register_user(request):
     if request.method == "POST":
         serializer = RegisterSerializer(data=request.data)
         data = {}
-        if serializer.is_valid:
+        if serializer.is_valid():
             account = serializer.save()
             data['response'] = "Seccessfully registered"
             data['email'] = account.email

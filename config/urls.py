@@ -35,9 +35,9 @@ urlpatterns = [
 
     # Rest Api
     path('api/product/', include('mainapp.product_api.urls', 'product_api')),
-    path('api/register/user/', include('custom_user.api_custom.urls')),
+    path('api/user/', include('custom_user.api_custom.urls')),
     path('api/contact/user/', include('contact.api_contact.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

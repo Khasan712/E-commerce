@@ -66,9 +66,13 @@ def api_product_delete(request, pk):
 def api_product_create(request):
     product_user = Custom_User.objects.get(id=1)
     if request.method == 'POST':
+        print('1')
         serializer = ProductsSerializers(product_user, data=request.data)
+        print('2')
         if serializer.is_valid():
+            print('3')
             serializer.save()
+            print('4')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         data = {}
         data["False"] = "Anything is wrong"
