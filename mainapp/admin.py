@@ -18,7 +18,12 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(MainCategory)
+
+@admin.register(MainCategory)
+class MainCategoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'category', 'main_slug']
+    prepopulated_fields = {'main_slug':('category',)}
+
 admin.site.register(ProductCategories)
 
 class ImageProductAdmin(admin.ModelAdmin):
@@ -29,5 +34,9 @@ class ImageProductAdmin(admin.ModelAdmin):
     readonly_fields = ['image_tag']
 
 admin.site.register(ImageProduct, ImageProductAdmin)
+
+
+
+
 admin.site.register(SizesProducts)
 admin.site.register(ColorsProducts)

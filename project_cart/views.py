@@ -18,7 +18,6 @@ def _cart_id(request):
 def cart_add(request, product_id):
     product = Product.objects.get(id=product_id) # get product ID
     try:
-        
         cart = Cart.objects.get(cart_id=_cart_id(request)) # get cart ID from session
     except Cart.DoesNotExist:
         cart = Cart.objects.create(
@@ -27,12 +26,13 @@ def cart_add(request, product_id):
     cart.save()
     try:
         cart_item = CartItem.objects.get(product=product, cart=cart)
-        cart_item.product.qty_product += 1
+        cart_item.quantity += 1
         cart_item.save()
     except CartItem.DoesNotExist:
         cart_item = CartItem.objects.create(
             product = product,
-            cart = cart
+            quantity = 1,
+            cart = cart,
         )
         cart_item.save()
     # return HttpResponse(cart_item.product.price)
@@ -52,13 +52,20 @@ def cart(request, total=0, quantity=0, cart_items=None):
         tax = 0
         total_amount = 0
         if request.user.is_authenticated:
-            cart_items = CartItem.objects.filter(user=request.user, is_active=True)
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(user=request.user, cart=cart, is_active=True)
+            for cart_item in cart_items:
+                total += (cart_item.product.price * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (1 * total)/100
+            total_amount = total + tax
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
             for cart_item in cart_items:
-                total += (cart_item.product.price * cart_item.product.qty_product)
-                quantity += cart_item.product.qty_product
+                product_price = int(cart_item.product.price)
+                total += (product_price * cart_item.quantity)
+                quantity += cart_item.quantity
             tax = (1 * total)/100
             total_amount = total + tax
     except ObjectDoesNotExist:
@@ -74,6 +81,18 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'last_three':last_three,
     }
     return render(request, 'products/cart.html', context)
+
+
+def remove_cart_item(request, product_id):
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+    product = get_object_or_404(Product, id=product_id)
+    cart_item = CartItem.objects.get(product=product, cart=cart)
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect('cart')
 
 
 def delete_cart_item(request, product_id):
@@ -102,8 +121,8 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
             for cart_item in cart_items:
-                total += (cart_item.product.price * cart_item.product.qty_product)
-                quantity += cart_item.product.qty_product
+                total += (cart_item.product.price * cart_item.quantity)
+                quantity += cart_item.quantity
             tax = (1 * total)/100
             total_amount = total + tax
     except ObjectDoesNotExist:

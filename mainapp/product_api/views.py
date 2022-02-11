@@ -1,4 +1,4 @@
-from itertools import product
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -37,7 +37,7 @@ def api_product_update(request, pk):
     if request.method == 'PUT':
         serializer = ProductsSerializers(product, data=request.data)
         data = {}
-        if serializer.is_valid:
+        if serializer.is_valid():
             serializer.save()
             data["success"] = "Updated successful"
             return Response(data=data)
@@ -67,11 +67,11 @@ def api_product_create(request):
     product_user = Custom_User.objects.get(id=1)
     if request.method == 'POST':
         serializer = ProductsSerializers(product_user, data=request.data)
-        if serializer.is_valid:
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         data = {}
-        data["False"] = "Aomething wrong"
+        data["False"] = "Anything is wrong"
         return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
         
 

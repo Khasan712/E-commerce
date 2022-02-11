@@ -38,6 +38,15 @@ class ImageProductSerializers(serializers.ModelSerializer):
 
 class ProductsSerializers(serializers.ModelSerializer):
     product_user = serializers.CharField()
+    main_category = serializers.StringRelatedField(
+        many=True,
+        # read_only=True,
+        # view_name='category-detail'
+    )
+    product_category = serializers.StringRelatedField(many=True)
+    color = serializers.StringRelatedField(many=True)
+    size = serializers.StringRelatedField(many=True)
+    image = serializers.StringRelatedField(many=True)
     class Meta:
         model = Product
         fields = '__all__'

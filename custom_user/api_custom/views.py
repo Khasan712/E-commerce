@@ -24,4 +24,9 @@ def register_user(request):
         return Response(data)
 
 
+# obj = form.save(commit=False)
+#             product_user = Custom_User.objects.filter(username=user.username).first()
 
+# data = Order()
+#             data.user = user
+#             data.first_name = form.cleaned_data['first_name']

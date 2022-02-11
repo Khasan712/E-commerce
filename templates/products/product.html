@@ -62,53 +62,52 @@
                                     <h1 class="product-title">{{product.title}}</h1><!-- End .product-title -->
 
                                     <div class="ratings-container">
-                                        <div class="ratings">
+                                        {% comment %} <div class="ratings">
                                             <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
+                                        </div><!-- End .ratings --> {% endcomment %}
                                         <a class="ratings-text" href="#product-review-link" id="review-link">( {% get_hit_count for product %} Reviews ){% post_to_facebook object_or_url "Post to Facebook! " %} | {% post_to_whatsapp object_or_url "Share via WhatsApp" %}</a>
                                     </div><!-- End .rating-container -->
 
                                     <div class="product-price">
-                                        {{product.price}}
+                                        $ {{product.price}}
                                     </div><!-- End .product-price -->
 
                                     <div class="product-content">
-                                        <p>{{product.description}}</p>
+                                        
                                     </div><!-- End .product-content -->
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label>Color:</label>
-
+                                    <div class="details-filter-row details-row-category">
+                                        <label class="">Category:</label>
                                         <div class="product-nav product-nav-thumbs">
-                                            <a href="#" class="active">
-                                                <img src="{% static 'assets/images/products/single/1-thumb.jpg' %}" alt="product desc">
+
+                                            {% for pro in product.product_category.all %}
+                                            <a href="#" class="pl-3 pr-3">
+                                                {{pro}},
                                             </a>
-                                            <a href="#">
-                                                <img src="{% static 'assets/images/products/single/2-thumb.jpg' %}" alt="product desc">
-                                            </a>
+                                            {% endfor %}
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .details-filter-row -->
-
-                                    <div class="details-filter-row details-row-size">
-                                        <label for="size">Size:</label>
-                                        <div class="select-custom">
-                                            <select name="size" id="size" class="form-control">
-                                                <option value="#" selected="selected">Select a size</option>
-
-                                                {% for s in product.size.all %}
-                                                    <option value="s">{{s}}</option>
+                                            
+                                    <div class="details-filter-row details-row-color">
+                                        <div>
+                                            <select name="color" class="form-select">
+                                                    <option selected>Colors</option>
+                                                    {% for c in product.color.all %}
+                                                    <option value="{{c}}">{{c}}</option>
                                                 {% endfor %}
                                             </select>
-                                        </div><!-- End .select-custom -->
-
-                                        <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
+                                        </div>
                                     </div><!-- End .details-filter-row -->
 
                                     <div class="details-filter-row details-row-size">
-                                        <label for="qty">Qty:</label>
-                                        <div class="product-details-quantity">
-                                            <input type="number" id="qty" class="form-control" value="{{product.qty_product}}" min="1" max="10" step="1" data-decimals="0" required>
-                                        </div><!-- End .product-details-quantity -->
+                                        <div>
+                                            <select name="size" class="form-select">
+                                                <option selected>Sizes</option>
+                                                {% for c in product.size.all %}
+                                                <option value="{{c}}">{{c}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        </div>
                                     </div><!-- End .details-filter-row -->
 
                                     <div class="product-details-action">
@@ -164,14 +163,9 @@
                             <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
                                 <div class="product-desc-content">
                                     <h3>Product Information</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
-                                    <ul>
-                                        <li>Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit. </li>
-                                        <li>Vivamus finibus vel mauris ut vehicula.</li>
-                                        <li>Nullam a magna porttitor, dictum risus nec, faucibus sapien.</li>
-                                    </ul>
+                                    <p>{{product.description | safe }}</p>
+                                    
 
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
                                 </div><!-- End .product-desc-content -->
                             </div><!-- .End .tab-pane -->
                             <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">

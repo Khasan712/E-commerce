@@ -20,7 +20,7 @@ class ContactInfo(models.Model):
 
 class ContactUser(models.Model):
     name = models.CharField(max_length=250, blank=True)
-    email = models.ImageField(max_length=250, blank=True)
+    email = models.EmailField(max_length=250, blank=True)
     phone = PhoneField(blank=True)
     subject = models.CharField(max_length=250, blank=True)
     message = models.TextField(blank=True)
